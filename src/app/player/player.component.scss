@@ -68,19 +68,6 @@
   height: 150px;
 }
 
-.socials {
-  display: flex;
-  justify-content: center;
-}
-
-.social-links img {
-  height: 25px;
-}
-
-.social-links:not(:nth-last-child(1)) {
-  margin-right: 10px;
-}
-
 .record-container {
   display: flex;
   flex-direction: column;
@@ -128,4 +115,21 @@
   color: white;
   font-size: 3.5rem;
   font-weight: bolder;
+}
+
+.socials {
+  display: flex;
+  justify-content: center;
+}
+
+.social-links img {
+  height: 25px;
+}
+
+.social-links:not(:nth-last-child(1)) {
+  margin-right: 10px;
+}
+
+.social-links:hover {
+  filter: brightness(1.5);
 }
