@@ -1,6 +1,8 @@
 export interface Player {
   personaName: string;
   avatar: string;
+  profileUrl: string;
+  dotabuffUrl: string;
   rank: Rank;
   records: Record[];
   personaState: PersonaState;

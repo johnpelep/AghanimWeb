@@ -9,7 +9,7 @@ import { PlayerService } from '../player.service';
   styleUrls: ['./player.component.scss'],
 })
 export class PlayerComponent implements OnInit {
-  player: Player | undefined;
+  player!: Player;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,9 +22,8 @@ export class PlayerComponent implements OnInit {
 
   getPlayer() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.playerService.getPlayer(id).subscribe((player) => {
-      this.player = player;
-      console.log(this.player.rank.medalName);
-    });
+    this.playerService
+      .getPlayer(id)
+      .subscribe((player) => (this.player = player));
   }
 }

@@ -1,1 +1,39 @@
-<p>player works!</p>
+<div class="header" *ngIf="player">
+  <div class="info-container">
+    <img class="info avatar ingame" src="{{ player.avatar }}" alt="avatar" />
+    <span class="info personaname ingame">{{ player.personaName }}</span>
+    <img class="info medal" src="{{ player.rank.medalUrl }}" alt="medal" />
+  </div>
+  <div class="record-container">
+    <div class="record-counter-container">
+      <div class="record-counter">
+        <span class="record-key win">WINS</span>
+        <span class="record-value">{{ player.records[0].winCount }}</span>
+      </div>
+      <div class="record-counter">
+        <span class="record-key loss">LOSSES</span>
+        <span class="record-value">{{ player.records[0].lossCount }}</span>
+      </div>
+      <div class="record-counter">
+        <span class="record-key winrate">WIN RATE</span>
+        <span class="record-value">{{ player.records[0].winRate }}%</span>
+      </div>
+    </div>
+    <div class="socials" *ngIf="player">
+      <a
+        class="social-links"
+        href="{{ player.profileUrl }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        ><img src="/assets/steam.png" alt="steam"
+      /></a>
+      <a
+        class="social-links"
+        href="{{ player.dotabuffUrl }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        ><img src="/assets/dotabuff.png" alt="dotabuff"
+      /></a>
+    </div>
+  </div>
+</div>
