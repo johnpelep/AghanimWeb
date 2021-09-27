@@ -1,30 +1,34 @@
 <div class="header" *ngIf="player">
   <div class="info-container">
-    <img class="info avatar ingame" src="{{ player.avatar }}" alt="avatar" />
-    <span class="info personaname ingame">{{ player.personaName }}</span>
+    <img
+      class="info avatar {{ status }}"
+      src="{{ player.avatar }}"
+      alt="avatar"
+    />
+    <span class="info personaname {{ status }}">{{ player.personaName }}</span>
     <img class="info medal" src="{{ player.rank.medalUrl }}" alt="medal" />
   </div>
   <div class="record-container">
     <div class="record-counter-container">
       <div class="record-counter">
         <span class="record-value">{{ gameCount }}</span>
-        <span class="record-key winrate">GAMES</span>
+        <span class="record-key">GAMES</span>
       </div>
       <div class="record-counter">
         <span class="record-value">{{ winCount }}</span>
-        <span class="record-key win">WINS</span>
+        <span class="record-key">WINS</span>
       </div>
       <div class="record-counter">
         <span class="record-value">{{ lossCount }}</span>
-        <span class="record-key loss">LOSSES</span>
+        <span class="record-key">LOSSES</span>
       </div>
       <div class="record-counter">
         <span class="record-value">{{ winRate }}</span>
-        <span class="record-key winrate">WIN RATE</span>
+        <span class="record-key">WIN RATE</span>
       </div>
       <div class="record-counter">
         <span class="record-value">{{ streak }}</span>
-        <span class="record-key winrate">STREAK</span>
+        <span class="record-key">STREAK</span>
       </div>
     </div>
     <div class="socials" *ngIf="player">

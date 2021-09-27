@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Player } from '../player';
+import { Player, PersonaState } from '../player';
 import { PlayerService } from '../player.service';
 
 @Component({
@@ -10,6 +10,7 @@ import { PlayerService } from '../player.service';
 })
 export class PlayerComponent implements OnInit {
   player!: Player;
+  status: string = 'offline';
   gameCount: string = '--';
   winCount: string = '--';
   lossCount: string = '--';
@@ -29,6 +30,8 @@ export class PlayerComponent implements OnInit {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.playerService.getPlayer(id).subscribe((player) => {
       this.player = player;
+
+      this.setPersonaState(player.personaState);
 
       if (!player.records.length) return;
 
@@ -54,6 +57,15 @@ export class PlayerComponent implements OnInit {
         this.streak = `${record.streakCount.toString()} wins`;
       else this.streak = `${record.streakCount.toString()} losses`;
     });
+  }
+
+  setPersonaState(personaState: PersonaState) {
+    let status = '';
+    if (personaState.game) status = 'ingame';
+    else if (personaState.id == 0) status = 'offline';
+    else if (personaState.id == 1) status = 'online';
+    else status = 'away';
+    this.status = status;
   }
 
   //https://stackoverflow.com/a/8207708

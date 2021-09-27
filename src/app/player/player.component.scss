@@ -27,7 +27,7 @@
 }
 
 .avatar.away {
-  border-right: 5px solid rgb(77, 118, 140);
+  border-right: 5px dashed rgb(77, 118, 140);
   filter: brightness(80%);
 }
 
@@ -90,18 +90,6 @@
   font-size: 2rem;
   font-weight: bold;
 }
-
-// .record-key.win {
-//   color: rgb(117, 178, 75);
-// }
-
-// .record-key.loss {
-//   color: rgb(216, 70, 54);
-// }
-
-// .record-key.winrate {
-//   color: rgb(154, 154, 154);
-// }
 
 .record-value {
   color: white;

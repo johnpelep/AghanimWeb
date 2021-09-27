@@ -8,6 +8,13 @@ export interface Player {
   personaState: PersonaState;
 }
 
+export interface PersonaState {
+  id: number;
+  name: string;
+  game: string;
+  lastLogOff: string;
+}
+
 interface Rank {
   tier: number;
   medalName: string;
@@ -23,10 +30,4 @@ interface Record {
   isWinStreak: boolean;
   lastMatchOn: string;
   winRate: number;
-}
-
-interface PersonaState {
-  name: string;
-  game: string;
-  lastLogOff: string;
 }
