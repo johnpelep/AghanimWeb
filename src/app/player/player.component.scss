@@ -1,11 +1,10 @@
 .header {
-  background-color: #1f2126;
-  border: 1px solid red;
   display: flex;
   flex-direction: column;
+  gap: 20px 0;
   padding: 20px;
-  margin: 0 auto;
-  width: 70%;
+  margin: 50px auto;
+  width: 60%;
 }
 
 .info-container {
@@ -14,14 +13,9 @@
   justify-content: space-between;
 }
 
-.info:not(:nth-last-child(1)) {
-  margin-bottom: 20px;
-}
-
 .avatar {
   height: 150px;
   border-radius: 5px;
-  // margin-right: 30px;
 }
 
 .avatar.ingame {
@@ -71,13 +65,15 @@
 .record-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 30px 0;
 }
 
 .record-counter-container {
+  background-color: rgba(31, 33, 38, 0.75);
   display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
 }
 
 .record-counter {
@@ -85,31 +81,27 @@
   flex-direction: column;
   align-items: center;
 
-  flex-grow: 1;
-  flex-basis: 0;
-}
-
-.record-counter:not(:nth-last-child(1)) {
-  margin-right: 20px;
+  // flex-grow: 1;
+  width: 33.3%;
 }
 
 .record-key {
-  color: red;
+  color: rgb(154, 154, 154);
   font-size: 2rem;
   font-weight: bold;
 }
 
-.record-key.win {
-  color: rgb(117, 178, 75);
-}
+// .record-key.win {
+//   color: rgb(117, 178, 75);
+// }
 
-.record-key.loss {
-  color: rgb(216, 70, 54);
-}
+// .record-key.loss {
+//   color: rgb(216, 70, 54);
+// }
 
-.record-key.winrate {
-  color: rgb(154, 154, 154);
-}
+// .record-key.winrate {
+//   color: rgb(154, 154, 154);
+// }
 
 .record-value {
   color: white;

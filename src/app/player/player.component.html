@@ -7,16 +7,24 @@
   <div class="record-container">
     <div class="record-counter-container">
       <div class="record-counter">
+        <span class="record-value">{{ gameCount }}</span>
+        <span class="record-key winrate">GAMES</span>
+      </div>
+      <div class="record-counter">
+        <span class="record-value">{{ winCount }}</span>
         <span class="record-key win">WINS</span>
-        <span class="record-value">{{ player.records[0].winCount }}</span>
       </div>
       <div class="record-counter">
+        <span class="record-value">{{ lossCount }}</span>
         <span class="record-key loss">LOSSES</span>
-        <span class="record-value">{{ player.records[0].lossCount }}</span>
       </div>
       <div class="record-counter">
+        <span class="record-value">{{ winRate }}</span>
         <span class="record-key winrate">WIN RATE</span>
-        <span class="record-value">{{ player.records[0].winRate }}%</span>
+      </div>
+      <div class="record-counter">
+        <span class="record-value">{{ streak }}</span>
+        <span class="record-key winrate">STREAK</span>
       </div>
     </div>
     <div class="socials" *ngIf="player">
