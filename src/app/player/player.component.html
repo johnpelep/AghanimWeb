@@ -8,44 +8,43 @@
     <span class="info personaname {{ status }}">{{ player.personaName }}</span>
     <img class="info medal" src="{{ player.rank.medalUrl }}" alt="medal" />
   </div>
-  <div class="record-container">
-    <div class="record-counter-container">
-      <div class="record-counter">
-        <span class="record-value">{{ gameCount }}</span>
-        <span class="record-key">GAMES</span>
-      </div>
-      <div class="record-counter">
-        <span class="record-value">{{ winCount }}</span>
-        <span class="record-key">WINS</span>
-      </div>
-      <div class="record-counter">
-        <span class="record-value">{{ lossCount }}</span>
-        <span class="record-key">LOSSES</span>
-      </div>
-      <div class="record-counter">
-        <span class="record-value">{{ winRate }}</span>
-        <span class="record-key">WIN RATE</span>
-      </div>
-      <div class="record-counter">
-        <span class="record-value">{{ streak }}</span>
-        <span class="record-key">STREAK</span>
-      </div>
+  <div class="record-counter-container">
+    <div class="record-counter">
+      <span class="record-value">{{ gameCount }}</span>
+      <span class="record-key">GAMES</span>
     </div>
-    <div class="socials" *ngIf="player">
-      <a
-        class="social-links"
-        href="{{ player.profileUrl }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        ><img src="/assets/steam.png" alt="steam"
-      /></a>
-      <a
-        class="social-links"
-        href="{{ player.dotabuffUrl }}"
-        target="_blank"
-        rel="noopener noreferrer"
-        ><img src="/assets/dotabuff.png" alt="dotabuff"
-      /></a>
+    <div class="record-counter">
+      <span class="record-value">{{ winCount }}</span>
+      <span class="record-key">WINS</span>
+    </div>
+    <div class="record-counter">
+      <span class="record-value">{{ lossCount }}</span>
+      <span class="record-key">LOSSES</span>
+    </div>
+    <div class="record-counter">
+      <span class="record-value">{{ winRate }}</span>
+      <span class="record-key">WIN RATE</span>
+    </div>
+    <div class="record-counter">
+      <span class="record-value">{{ streak }}</span>
+      <span class="record-key">STREAK</span>
     </div>
   </div>
+</div>
+
+<div class="socials" *ngIf="player">
+  <a
+    class="social-links"
+    href="{{ player.profileUrl }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    ><img src="/assets/steam.png" alt="steam"
+  /></a>
+  <a
+    class="social-links"
+    href="{{ player.dotabuffUrl }}"
+    target="_blank"
+    rel="noopener noreferrer"
+    ><img src="/assets/dotabuff.png" alt="dotabuff"
+  /></a>
 </div>
