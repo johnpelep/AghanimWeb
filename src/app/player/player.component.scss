@@ -113,3 +113,16 @@
 .social-links:hover {
   filter: brightness(1.5);
 }
+
+#custom-tooltip {
+  display: none;
+  font-size: 0.5rem;
+}
+.click {
+  font-size: 0.6rem;
+  font-style: italic;
+}
+
+#matches-modal {
+  display: none;
+}

@@ -48,3 +48,43 @@
     ><img src="/assets/dotabuff.png" alt="dotabuff"
   /></a>
 </div>
+
+<!-- CUSTOM TOOLTIP -->
+<div id="custom-tooltip">
+  <div *ngIf="selectedRecord.winCount > 0 || selectedRecord.lossCount > 0">
+    <span
+      >W/L:
+      {{
+        selectedRecord.winCount.toString() + "/" + selectedRecord.lossCount
+      }}</span
+    >
+    <br />
+    <span class="click">Click to see more details...</span>
+  </div>
+  <span *ngIf="selectedRecord.winCount == 0 && selectedRecord.lossCount == 0"
+    >No games</span
+  >
+</div>
+
+<!-- selectedMatches MODAL -->
+<div id="matches-modal">
+  <table *ngIf="selectedMatches.length">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Hero</th>
+        <th>W/L</th>
+        <th>Dotabuff</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let match of selectedMatches">
+        <td>Mekeh</td>
+        <td>{{ match.heroId }}</td>
+        <td>{{ match.isWin ? "W" : "L" }}</td>
+        <td>Mekeh</td>
+      </tr>
+    </tbody>
+  </table>
+  <span *ngIf="selectedMatches.length == 0">No games</span>
+</div>

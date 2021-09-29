@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import ApexCharts from 'apexcharts';
-import { Player } from '../player';
+import { Player, Match, Record } from '../player';
 import { PlayerService } from '../player.service';
 
 @Component({
@@ -17,6 +17,17 @@ export class PlayerComponent implements OnInit {
   lossCount: string = '--';
   winRate: string = '--';
   streak: string = '--';
+  selectedMatches: Match[] = [];
+  selectedRecord: Record = {
+    month: 0,
+    year: 0,
+    winCount: 0,
+    lossCount: 0,
+    isWinStreak: false,
+    streakCount: 0,
+    lastMatchOn: '',
+    winRate: 0,
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -94,6 +105,9 @@ export class PlayerComponent implements OnInit {
       chart: {
         type: 'line',
         forecolore: '#FFFFFF',
+        events: {
+          click: (e: any, chart?: any, options?: any) => console.log(options),
+        },
         toolbar: {
           show: false,
         },
@@ -101,23 +115,27 @@ export class PlayerComponent implements OnInit {
       },
       series: [
         {
-          name: 'Net W/L',
           data: this.getMatchData(),
         },
       ],
+      tooltip: {
+        custom: ({ series, seriesIndex, dataPointIndex, w }: any) => {
+          return this.getToolTip(dataPointIndex);
+        },
+      },
       xaxis: {
         categories: this.getDaysOfMonth(),
         labels: {
           style: {
             colors: '#FFFFFF',
-            fontSize: '0.7 rem',
+            fontSize: '0.7rem',
           },
         },
         title: {
           text: 'Days of Month',
           style: {
             color: '#FFFFFF',
-            fontSize: '1 rem',
+            fontSize: '1rem',
           },
         },
       },
@@ -125,14 +143,14 @@ export class PlayerComponent implements OnInit {
         labels: {
           style: {
             colors: '#FFFFFF',
-            fontSize: '0.7 rem',
+            fontSize: '0.7rem',
           },
         },
         title: {
           text: 'Net W/L',
           style: {
             color: '#FFFFFF',
-            fontSize: '1 rem',
+            fontSize: '1rem',
           },
         },
       },
@@ -173,5 +191,31 @@ export class PlayerComponent implements OnInit {
     }
 
     return categories;
+  }
+
+  getToolTip(dataPointIndex: number): string {
+    this.selectedMatches = this.player.matches.filter(
+      (m) => m.day == dataPointIndex + 1
+    );
+
+    this.selectedRecord.winCount = 0;
+    this.selectedRecord.lossCount = 0;
+
+    this.selectedMatches.forEach((match) => {
+      if (match.isWin) this.selectedRecord.winCount++;
+      else this.selectedRecord.lossCount++;
+    });
+
+    // return (
+    //   '<div>' +
+    //   '<span> W/L: ' +
+    //   winCount.toString() +
+    //   '/' +
+    //   lossCount.toString() +
+    //   '</span>' +
+    //   '</div>'
+    // );
+    const tooltip = <HTMLElement>document.getElementById('custom-tooltip');
+    return tooltip.innerHTML;
   }
 }

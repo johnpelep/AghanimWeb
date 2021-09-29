@@ -9,14 +9,7 @@ export interface Player {
   matches: Match[];
 }
 
-interface PersonaState {
-  id: number;
-  name: string;
-  game: string;
-  lastLogOff: string;
-}
-
-interface Match {
+export interface Match {
   id: number;
   isWin: boolean;
   heroId: number;
@@ -26,13 +19,7 @@ interface Match {
   day: number;
 }
 
-interface Rank {
-  tier: number;
-  medalName: string;
-  medalUrl: string;
-}
-
-interface Record {
+export interface Record {
   month: number;
   year: number;
   winCount: number;
@@ -41,4 +28,17 @@ interface Record {
   isWinStreak: boolean;
   lastMatchOn: string;
   winRate: number;
+}
+
+interface PersonaState {
+  id: number;
+  name: string;
+  game: string;
+  lastLogOff: string;
+}
+
+interface Rank {
+  tier: number;
+  medalName: string;
+  medalUrl: string;
 }
