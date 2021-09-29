@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Player, PersonaState } from '../player';
+import ApexCharts from 'apexcharts';
+import { Player } from '../player';
 import { PlayerService } from '../player.service';
 
 @Component({
@@ -31,7 +32,7 @@ export class PlayerComponent implements OnInit {
     this.playerService.getPlayer(id).subscribe((player) => {
       this.player = player;
 
-      this.setPersonaState(player.personaState);
+      this.setPersonaState();
 
       if (!player.records.length) return;
 
@@ -50,6 +51,8 @@ export class PlayerComponent implements OnInit {
       this.lossCount = record.lossCount.toString();
       this.winRate = `${record.winRate}%`;
 
+      this.setUpChart();
+
       // return if no streak
       if (record.streakCount == 1) return;
 
@@ -59,7 +62,8 @@ export class PlayerComponent implements OnInit {
     });
   }
 
-  setPersonaState(personaState: PersonaState) {
+  setPersonaState() {
+    const personaState = this.player.personaState;
     let status = '';
     if (personaState.game) status = 'ingame';
     else if (personaState.id == 0) status = 'offline';
@@ -83,5 +87,91 @@ export class PlayerComponent implements OnInit {
     // create new Date object for different city
     // using supplied offset
     return new Date(utc + 3600000 * OFFSET);
+  }
+
+  setUpChart() {
+    const options = {
+      chart: {
+        type: 'line',
+        forecolore: '#FFFFFF',
+        toolbar: {
+          show: false,
+        },
+        zoom: { enabled: false },
+      },
+      series: [
+        {
+          name: 'Net W/L',
+          data: this.getMatchData(),
+        },
+      ],
+      xaxis: {
+        categories: this.getDaysOfMonth(),
+        labels: {
+          style: {
+            colors: '#FFFFFF',
+            fontSize: '0.7 rem',
+          },
+        },
+        title: {
+          text: 'Days of Month',
+          style: {
+            color: '#FFFFFF',
+            fontSize: '1 rem',
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: '#FFFFFF',
+            fontSize: '0.7 rem',
+          },
+        },
+        title: {
+          text: 'Net W/L',
+          style: {
+            color: '#FFFFFF',
+            fontSize: '1 rem',
+          },
+        },
+      },
+    };
+
+    const chart = new ApexCharts(document.querySelector('#chart'), options);
+
+    chart.render();
+  }
+
+  getMatchData(): number[] {
+    const matches = this.player.matches;
+    const data: number[] = [];
+    const daysOfMonth = this.getDaysOfMonth();
+
+    let netWinLoss = 0;
+
+    for (let index = 1; index <= daysOfMonth.length; index++) {
+      const matchesOfDay = matches.filter((m) => m.day == index);
+
+      matchesOfDay.forEach((match) => {
+        netWinLoss += match.isWin ? 1 : -1;
+      });
+
+      data.push(netWinLoss);
+    }
+
+    return data;
+  }
+
+  getDaysOfMonth(): number[] {
+    const dateInPh = this.getTimeInPh();
+    const currentDay = dateInPh.getDate();
+    const categories: number[] = [];
+
+    for (let index = 1; index <= currentDay; index++) {
+      categories.push(index);
+    }
+
+    return categories;
   }
 }

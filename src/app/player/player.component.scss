@@ -91,9 +91,15 @@
   font-weight: bolder;
 }
 
+#chart {
+  max-width: 50%;
+  margin: 30px auto;
+}
+
 .socials {
   display: flex;
   justify-content: center;
+  padding: 10px;
 }
 
 .social-links img {

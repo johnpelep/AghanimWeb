@@ -6,13 +6,24 @@ export interface Player {
   rank: Rank;
   records: Record[];
   personaState: PersonaState;
+  matches: Match[];
 }
 
-export interface PersonaState {
+interface PersonaState {
   id: number;
   name: string;
   game: string;
   lastLogOff: string;
+}
+
+interface Match {
+  id: number;
+  isWin: boolean;
+  heroId: number;
+  dotabuffUrl: string;
+  year: number;
+  month: number;
+  day: number;
 }
 
 interface Rank {
