@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Player } from './player';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlayerService {
-  private playersUrl =
-    'http://ec2-3-1-83-97.ap-southeast-1.compute.amazonaws.com/api/players';
+  private playersUrl = environment.aghanim_api_url;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  aghanim_api_url:
+    'http://ec2-3-1-83-97.ap-southeast-1.compute.amazonaws.com/api/players',
 };
 
 /*
