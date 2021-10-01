@@ -220,6 +220,14 @@ export class PlayerComponent implements OnInit {
     this.selectedMatches.forEach((match) => {
       if (match.isWin) this.selectedRecord.winCount++;
       else this.selectedRecord.lossCount++;
+
+      const startTime = new Date(match.startTime);
+      match.time = startTime.toLocaleString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      });
+      match.hero = <Hero>this.heroes[match.heroId.toString()];
     });
 
     const tooltip = <HTMLElement>document.getElementById('custom-tooltip');
@@ -232,16 +240,6 @@ export class PlayerComponent implements OnInit {
     );
 
     if (!this.selectedMatches.length) return;
-
-    this.selectedMatches.forEach((match) => {
-      const startTime = new Date(match.startTime);
-      match.time = startTime.toLocaleString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-      });
-      match.hero = <Hero>this.heroes[match.heroId.toString()];
-    });
 
     // sort match ascending
     this.selectedMatches.sort((a, b) => a.matchId - b.matchId);
