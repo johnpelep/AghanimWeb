@@ -45,7 +45,7 @@
     href="{{ player.dotabuffUrl }}"
     target="_blank"
     rel="noopener noreferrer"
-    ><img src="./assets/dotabuff.png" alt="dotabuff"
+    ><img src="./assets/dotabuff.png" alt="dotabuff_player"
   /></a>
 </div>
 
@@ -67,24 +67,44 @@
 </div>
 
 <!-- selectedMatches MODAL -->
-<div id="matches-modal">
-  <table *ngIf="selectedMatches.length">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Hero</th>
-        <th>W/L</th>
-        <th>Dotabuff</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let match of selectedMatches">
-        <td>Mekeh</td>
-        <td>{{ match.heroId }}</td>
-        <td>{{ match.isWin ? "W" : "L" }}</td>
-        <td>Mekeh</td>
-      </tr>
-    </tbody>
-  </table>
-  <span *ngIf="selectedMatches.length == 0">No games</span>
+<div id="matches-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-body">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <table *ngIf="selectedMatches.length">
+        <thead>
+          <tr>
+            <th>TIME</th>
+            <th>HERO</th>
+            <th>RESULTS</th>
+            <th>DOTABUFF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let match of selectedMatches">
+            <td>{{ match.time }}</td>
+            <td>
+              <img
+                src="{{ openDotaUrl.toString() + match.hero.icon.toString() }}"
+                alt="hero"
+              />
+            </td>
+            <td>
+              <span *ngIf="match.isWin" class="win">W</span
+              ><span *ngIf="!match.isWin" class="loss">L</span>
+            </td>
+            <td>
+              <a
+                class="social-links"
+                href="{{ match.dotabuffUrl }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><img src="./assets/dotabuff.png" alt="dotabuff"
+              /></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

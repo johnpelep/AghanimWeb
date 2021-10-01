@@ -1,3 +1,5 @@
+import { Hero } from './hero';
+
 export interface Player {
   personaName: string;
   avatar: string;
@@ -10,13 +12,15 @@ export interface Player {
 }
 
 export interface Match {
-  id: number;
+  matchId: number;
   isWin: boolean;
   heroId: number;
   dotabuffUrl: string;
   year: number;
   month: number;
-  day: number;
+  startTime: string;
+  time: string;
+  hero: Hero;
 }
 
 export interface Record {

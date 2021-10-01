@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import ApexCharts from 'apexcharts';
 import { Player, Match, Record } from '../player';
 import { PlayerService } from '../player.service';
+import { HeroService } from '../hero.service';
+import { Hero } from '../hero';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-player',
@@ -10,6 +13,7 @@ import { PlayerService } from '../player.service';
   styleUrls: ['./player.component.scss'],
 })
 export class PlayerComponent implements OnInit {
+  heroes!: any;
   player!: Player;
   status: string = 'offline';
   gameCount: string = '--';
@@ -28,14 +32,21 @@ export class PlayerComponent implements OnInit {
     lastMatchOn: '',
     winRate: 0,
   };
+  openDotaUrl = environment.open_dota_url;
 
   constructor(
     private route: ActivatedRoute,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private heroService: HeroService
   ) {}
 
   ngOnInit() {
+    this.getHeroes();
     this.getPlayer();
+  }
+
+  getHeroes() {
+    this.heroService.getHeroes().subscribe((heroes) => (this.heroes = heroes));
   }
 
   getPlayer() {
@@ -88,12 +99,12 @@ export class PlayerComponent implements OnInit {
     const OFFSET = 8; //UTC+8
 
     // create Date object for current location
-    var d = new Date();
+    const d = new Date();
 
     // convert to msec
     // subtract local time zone offset
     // get UTC time in msec
-    var utc = d.getTime() + d.getTimezoneOffset() * 60000;
+    const utc = d.getTime() + d.getTimezoneOffset() * 60000;
 
     // create new Date object for different city
     // using supplied offset
@@ -106,7 +117,9 @@ export class PlayerComponent implements OnInit {
         type: 'line',
         forecolore: '#FFFFFF',
         events: {
-          click: (e: any, chart?: any, options?: any) => console.log(options),
+          click: (e: any, chart?: any, options?: any) => {
+            this.clickChart(options.dataPointIndex);
+          },
         },
         toolbar: {
           show: false,
@@ -169,7 +182,11 @@ export class PlayerComponent implements OnInit {
     let netWinLoss = 0;
 
     for (let index = 1; index <= daysOfMonth.length; index++) {
-      const matchesOfDay = matches.filter((m) => m.day == index);
+      const matchesOfDay = matches.filter(
+        (m) => new Date(m.startTime).getDate() == index
+      );
+
+      if (!matchesOfDay.length) continue;
 
       matchesOfDay.forEach((match) => {
         netWinLoss += match.isWin ? 1 : -1;
@@ -195,27 +212,44 @@ export class PlayerComponent implements OnInit {
 
   getToolTip(dataPointIndex: number): string {
     this.selectedMatches = this.player.matches.filter(
-      (m) => m.day == dataPointIndex + 1
+      (m) => new Date(m.startTime).getDate() == dataPointIndex + 1
     );
 
     this.selectedRecord.winCount = 0;
     this.selectedRecord.lossCount = 0;
-
     this.selectedMatches.forEach((match) => {
       if (match.isWin) this.selectedRecord.winCount++;
       else this.selectedRecord.lossCount++;
     });
 
-    // return (
-    //   '<div>' +
-    //   '<span> W/L: ' +
-    //   winCount.toString() +
-    //   '/' +
-    //   lossCount.toString() +
-    //   '</span>' +
-    //   '</div>'
-    // );
     const tooltip = <HTMLElement>document.getElementById('custom-tooltip');
     return tooltip.innerHTML;
+  }
+
+  clickChart(dataPointIndex: number) {
+    this.selectedMatches = this.player.matches.filter(
+      (m) => new Date(m.startTime).getDate() == dataPointIndex + 1
+    );
+
+    this.selectedMatches.forEach((match) => {
+      const startTime = new Date(match.startTime);
+      match.time = startTime.toLocaleString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      });
+      match.hero = <Hero>this.heroes[match.heroId.toString()];
+    });
+
+    // sort match ascending
+    this.selectedMatches.sort((a, b) => a.matchId - b.matchId);
+
+    const modal = <HTMLElement>document.getElementById('matches-modal');
+    modal.style.display = 'block';
+  }
+
+  closeModal() {
+    const modal = <HTMLElement>document.getElementById('matches-modal');
+    modal.style.display = 'none';
   }
 }
