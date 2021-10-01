@@ -62,7 +62,6 @@ export class PlayerComponent implements OnInit {
 
       // get current record
       const dateInPh = this.getTimeInPh();
-      console.log(dateInPh);
       const record = player.records.find(
         (r) =>
           r.month == dateInPh.getMonth() + 1 && r.year == dateInPh.getFullYear()
@@ -189,8 +188,6 @@ export class PlayerComponent implements OnInit {
         (m) => new Date(m.startTime).getDate() == index
       );
 
-      if (!matchesOfDay.length) continue;
-
       matchesOfDay.forEach((match) => {
         netWinLoss += match.isWin ? 1 : -1;
       });
@@ -203,7 +200,6 @@ export class PlayerComponent implements OnInit {
 
   getDaysOfMonth(): number[] {
     const dateInPh = this.getTimeInPh();
-    console.log(dateInPh);
     const currentDay = dateInPh.getDate();
     const categories: number[] = [];
 
