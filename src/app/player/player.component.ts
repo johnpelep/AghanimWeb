@@ -54,12 +54,15 @@ export class PlayerComponent implements OnInit {
     this.playerService.getPlayer(id).subscribe((player) => {
       this.player = player;
 
+      if (!player) return;
+
       this.setPersonaState();
 
       if (!player.records.length) return;
 
       // get current record
       const dateInPh = this.getTimeInPh();
+      console.log(dateInPh);
       const record = player.records.find(
         (r) =>
           r.month == dateInPh.getMonth() + 1 && r.year == dateInPh.getFullYear()
@@ -200,6 +203,7 @@ export class PlayerComponent implements OnInit {
 
   getDaysOfMonth(): number[] {
     const dateInPh = this.getTimeInPh();
+    console.log(dateInPh);
     const currentDay = dateInPh.getDate();
     const categories: number[] = [];
 
