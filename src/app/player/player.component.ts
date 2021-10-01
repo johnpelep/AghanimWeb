@@ -231,6 +231,8 @@ export class PlayerComponent implements OnInit {
       (m) => new Date(m.startTime).getDate() == dataPointIndex + 1
     );
 
+    if (!this.selectedMatches.length) return;
+
     this.selectedMatches.forEach((match) => {
       const startTime = new Date(match.startTime);
       match.time = startTime.toLocaleString('en-US', {
