@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class PlayerService {
-  private playersUrl = environment.aghanim_api_url;
+  private playersUrl = `${environment.aghanim_api_url}/api/players`;
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

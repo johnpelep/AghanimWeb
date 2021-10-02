@@ -18,7 +18,7 @@ export class PlayerComponent implements OnInit {
   statusClass = 'offline';
 
   // for record display
-  gameCount = '--';
+  totalGames = '--';
   winCount = '--';
   lossCount = '--';
   winRate = '--';
@@ -26,15 +26,16 @@ export class PlayerComponent implements OnInit {
 
   // for chart and modal
   openDotaUrl = environment.open_dota_url;
+  datesUntilLastMonth: Date[] = [];
+  matchesPerCategory: Match[][] = [];
   selectedMatches: Match[] = [];
   selectedRecord: Record = {
-    month: 0,
-    year: 0,
     winCount: 0,
     lossCount: 0,
     isWinStreak: false,
     streakCount: 0,
     lastMatchOn: '',
+    totalGames: 0,
     winRate: 0,
   };
 
@@ -59,12 +60,12 @@ export class PlayerComponent implements OnInit {
       this.player = player;
 
       if (!player) return;
-
       this.setPersonaState();
 
-      if (!player.records.length) return;
-
+      if (!player.record.totalGames) return;
       this.setRecord();
+
+      if (!player.matches.length) return;
       this.setUpChart();
     });
   }
@@ -80,17 +81,9 @@ export class PlayerComponent implements OnInit {
   }
 
   setRecord() {
-    // get current record
-    const dateInPh = this.getDateTimeInPh();
-    const record = this.player.records.find(
-      (r) =>
-        r.month == dateInPh.getMonth() + 1 && r.year == dateInPh.getFullYear()
-    );
+    const record = this.player.record;
 
-    // return if no record
-    if (!record || !record.streakCount) return;
-
-    this.gameCount = (record.winCount + record.lossCount).toString();
+    this.totalGames = record.totalGames.toString();
     this.winCount = record.winCount.toString();
     this.lossCount = record.lossCount.toString();
     this.winRate = `${record.winRate}%`;
@@ -146,7 +139,7 @@ export class PlayerComponent implements OnInit {
         },
       },
       xaxis: {
-        categories: this.getDaysOfMonth(),
+        categories: this.getCategories(),
         labels: {
           style: {
             colors: '#FFFFFF',
@@ -154,7 +147,7 @@ export class PlayerComponent implements OnInit {
           },
         },
         title: {
-          text: 'Days of Month',
+          text: 'Past 30 Days',
           style: {
             color: '#FFFFFF',
             fontSize: '1rem',
@@ -186,54 +179,72 @@ export class PlayerComponent implements OnInit {
   getMatchData(): number[] {
     const matches = this.player.matches;
     const data: number[] = [];
-    const daysOfMonth = this.getDaysOfMonth();
+    this.datesUntilLastMonth = this.getDatesUntilLastMonth();
 
     let netWinLoss = 0;
 
-    for (let index = 1; index <= daysOfMonth.length; index++) {
+    this.datesUntilLastMonth.forEach((date) => {
       const matchesOfDay = matches.filter(
-        (m) => new Date(m.startTime).getDate() == index
+        (m) =>
+          new Date(m.startTime).getDate() == date.getDate() &&
+          new Date(m.startTime).getMonth() == date.getMonth()
       );
+
+      this.matchesPerCategory.push(matchesOfDay);
 
       matchesOfDay.forEach((match) => {
         netWinLoss += match.isWin ? 1 : -1;
       });
 
       data.push(netWinLoss);
-    }
+    });
 
     return data;
   }
 
-  getDaysOfMonth(): number[] {
-    const dateInPh = this.getDateTimeInPh();
-    const currentDay = dateInPh.getDate();
-    const categories: number[] = [];
+  getCategories(): string[] {
+    const categories: string[] = [];
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+    };
 
-    for (let index = 1; index <= currentDay; index++) {
-      categories.push(index);
-    }
+    this.datesUntilLastMonth.forEach((date) => {
+      categories.push(date.toLocaleString('en-US', options));
+    });
 
     return categories;
   }
 
-  getToolTip(dataPointIndex: number): string {
+  getDatesUntilLastMonth(): Date[] {
+    const dates: Date[] = [];
     const dateInPh = this.getDateTimeInPh();
+    let date = new Date(dateInPh.setDate(dateInPh.getDate() - 30));
+
+    do {
+      dates.push(date);
+      date = new Date(date.setDate(date.getDate() + 1)); // increment day by 1
+    } while (date.getDate() != dateInPh.getDate());
+
+    console.log(dates);
+
+    return dates;
+  }
+
+  getToolTip(dataPointIndex: number): string {
+    const selectedDate = this.datesUntilLastMonth[dataPointIndex];
     let options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
       month: 'long',
       year: 'numeric',
       day: 'numeric',
     };
-    this.selectedRecord.lastMatchOn = new Date(
-      dateInPh.getFullYear(),
-      dateInPh.getMonth(),
-      dataPointIndex + 1
-    ).toLocaleString('en-US', options);
-
-    this.selectedMatches = this.player.matches.filter(
-      (m) => new Date(m.startTime).getDate() == dataPointIndex + 1
+    this.selectedRecord.lastMatchOn = selectedDate.toLocaleString(
+      'en-US',
+      options
     );
+
+    this.selectedMatches = this.matchesPerCategory[dataPointIndex];
 
     this.selectedRecord.winCount = 0;
     this.selectedRecord.lossCount = 0;
@@ -259,9 +270,7 @@ export class PlayerComponent implements OnInit {
   }
 
   clickChart(dataPointIndex: number) {
-    this.selectedMatches = this.player.matches.filter(
-      (m) => new Date(m.startTime).getDate() == dataPointIndex + 1
-    );
+    this.selectedMatches = this.matchesPerCategory[dataPointIndex];
 
     if (!this.selectedMatches.length) return;
 

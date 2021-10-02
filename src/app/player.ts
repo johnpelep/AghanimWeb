@@ -6,7 +6,7 @@ export interface Player {
   profileUrl: string;
   dotabuffUrl: string;
   rank: Rank;
-  records: Record[];
+  record: Record;
   personaState: PersonaState;
   matches: Match[];
 }
@@ -16,21 +16,18 @@ export interface Match {
   isWin: boolean;
   heroId: number;
   dotabuffUrl: string;
-  year: number;
-  month: number;
   startTime: string;
   time: string;
   hero: Hero;
 }
 
 export interface Record {
-  month: number;
-  year: number;
   winCount: number;
   lossCount: number;
   streakCount: number;
   isWinStreak: boolean;
   lastMatchOn: string;
+  totalGames: number;
   winRate: number;
 }
 
