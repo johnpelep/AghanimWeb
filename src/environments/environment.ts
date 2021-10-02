@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  aghanim_api_url:
-    'http://ec2-3-1-83-97.ap-southeast-1.compute.amazonaws.com/api/players',
+  aghanim_api_url: 'https://localhost:5001',
   open_dota_url: 'https://api.opendota.com',
 };
 
