@@ -114,11 +114,19 @@
   filter: brightness(1.5);
 }
 
-#custom-tooltip {
+#custom-tooltip-container {
   display: none;
-  font-size: 0.5rem;
 }
-.click {
+
+.tooltip-title,
+.tooltip-content {
+  font-size: 0.8rem;
+}
+
+.tooltip-title {
+  font-weight: bold;
+}
+.tooltip-footer {
   font-size: 0.6rem;
   font-style: italic;
 }
@@ -202,6 +210,10 @@
 
 .modal th {
   color: rgb(119, 143, 142);
+}
+
+.modal-hero {
+  height: 25px;
 }
 
 .modal .win {
