@@ -1,11 +1,13 @@
 <div class="header" *ngIf="player">
   <div class="info-container">
     <img
-      class="info avatar {{ status }}"
+      class="info avatar {{ statusClass }}"
       src="{{ player.avatar }}"
       alt="avatar"
     />
-    <span class="info personaname {{ status }}">{{ player.personaName }}</span>
+    <span class="info personaname {{ statusClass }}">{{
+      player.personaName
+    }}</span>
     <img class="info medal" src="{{ player.rank.medalUrl }}" alt="medal" />
   </div>
   <div class="record-counter-container">
@@ -50,23 +52,26 @@
 </div>
 
 <!-- CUSTOM TOOLTIP -->
-<div id="custom-tooltip">
-  <div *ngIf="selectedRecord.winCount > 0 || selectedRecord.lossCount > 0">
-    <span
-      >W/L:
-      {{
-        selectedRecord.winCount.toString() + "/" + selectedRecord.lossCount
-      }}</span
-    >
-    <br />
-    <span class="click">Click to see more details...</span>
+<div id="custom-tooltip-container">
+  <div class="custom-tooltip">
+    <span class="tooltip-title">{{ selectedRecord.lastMatchOn }} </span>
+    <div *ngIf="selectedRecord.winCount > 0 || selectedRecord.lossCount > 0">
+      <span class="tooltip-content"
+        >W/L:
+        {{
+          selectedRecord.winCount.toString() + "/" + selectedRecord.lossCount
+        }}</span
+      >
+      <br />
+      <span class="tooltip-footer">Click to see more details...</span>
+    </div>
+    <div *ngIf="selectedRecord.winCount == 0 && selectedRecord.lossCount == 0">
+      <span class="tooltip-content">No games</span>
+    </div>
   </div>
-  <span *ngIf="selectedRecord.winCount == 0 && selectedRecord.lossCount == 0"
-    >No games</span
-  >
 </div>
 
-<!-- selectedMatches MODAL -->
+<!-- MATCHES MODAL -->
 <div id="matches-modal" class="modal">
   <div class="modal-content">
     <div class="modal-body">
@@ -85,6 +90,7 @@
             <td>{{ match.time }}</td>
             <td>
               <img
+                class="modal-hero"
                 src="{{ openDotaUrl.toString() + match.hero.icon.toString() }}"
                 alt="hero"
               />

@@ -15,12 +15,17 @@ import { environment } from 'src/environments/environment';
 export class PlayerComponent implements OnInit {
   heroes!: any;
   player!: Player;
-  status: string = 'offline';
-  gameCount: string = '--';
-  winCount: string = '--';
-  lossCount: string = '--';
-  winRate: string = '--';
-  streak: string = '--';
+  statusClass = 'offline';
+
+  // for record display
+  gameCount = '--';
+  winCount = '--';
+  lossCount = '--';
+  winRate = '--';
+  streak = '--';
+
+  // for chart and modal
+  openDotaUrl = environment.open_dota_url;
   selectedMatches: Match[] = [];
   selectedRecord: Record = {
     month: 0,
@@ -32,7 +37,6 @@ export class PlayerComponent implements OnInit {
     lastMatchOn: '',
     winRate: 0,
   };
-  openDotaUrl = environment.open_dota_url;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,29 +64,8 @@ export class PlayerComponent implements OnInit {
 
       if (!player.records.length) return;
 
-      // get current record
-      const dateInPh = this.getTimeInPh();
-      const record = player.records.find(
-        (r) =>
-          r.month == dateInPh.getMonth() + 1 && r.year == dateInPh.getFullYear()
-      );
-
-      // return if no record
-      if (!record || !record.streakCount) return;
-
-      this.gameCount = (record.winCount + record.lossCount).toString();
-      this.winCount = record.winCount.toString();
-      this.lossCount = record.lossCount.toString();
-      this.winRate = `${record.winRate}%`;
-
+      this.setRecord();
       this.setUpChart();
-
-      // return if no streak
-      if (record.streakCount == 1) return;
-
-      if (record.isWinStreak)
-        this.streak = `${record.streakCount.toString()} wins`;
-      else this.streak = `${record.streakCount.toString()} losses`;
     });
   }
 
@@ -93,11 +76,35 @@ export class PlayerComponent implements OnInit {
     else if (personaState.id == 0) status = 'offline';
     else if (personaState.id == 1) status = 'online';
     else status = 'away';
-    this.status = status;
+    this.statusClass = status;
+  }
+
+  setRecord() {
+    // get current record
+    const dateInPh = this.getDateTimeInPh();
+    const record = this.player.records.find(
+      (r) =>
+        r.month == dateInPh.getMonth() + 1 && r.year == dateInPh.getFullYear()
+    );
+
+    // return if no record
+    if (!record || !record.streakCount) return;
+
+    this.gameCount = (record.winCount + record.lossCount).toString();
+    this.winCount = record.winCount.toString();
+    this.lossCount = record.lossCount.toString();
+    this.winRate = `${record.winRate}%`;
+
+    // return if no streak
+    if (record.streakCount == 1) return;
+
+    if (record.isWinStreak)
+      this.streak = `${record.streakCount.toString()} wins`;
+    else this.streak = `${record.streakCount.toString()} losses`;
   }
 
   //https://stackoverflow.com/a/8207708
-  getTimeInPh(): Date {
+  getDateTimeInPh(): Date {
     const OFFSET = 8; //UTC+8
 
     // create Date object for current location
@@ -199,7 +206,7 @@ export class PlayerComponent implements OnInit {
   }
 
   getDaysOfMonth(): number[] {
-    const dateInPh = this.getTimeInPh();
+    const dateInPh = this.getDateTimeInPh();
     const currentDay = dateInPh.getDate();
     const categories: number[] = [];
 
@@ -211,26 +218,43 @@ export class PlayerComponent implements OnInit {
   }
 
   getToolTip(dataPointIndex: number): string {
+    const dateInPh = this.getDateTimeInPh();
+    let options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      month: 'long',
+      year: 'numeric',
+      day: 'numeric',
+    };
+    this.selectedRecord.lastMatchOn = new Date(
+      dateInPh.getFullYear(),
+      dateInPh.getMonth(),
+      dataPointIndex + 1
+    ).toLocaleString('en-US', options);
+
     this.selectedMatches = this.player.matches.filter(
       (m) => new Date(m.startTime).getDate() == dataPointIndex + 1
     );
 
     this.selectedRecord.winCount = 0;
     this.selectedRecord.lossCount = 0;
+
     this.selectedMatches.forEach((match) => {
       if (match.isWin) this.selectedRecord.winCount++;
       else this.selectedRecord.lossCount++;
 
       const startTime = new Date(match.startTime);
-      match.time = startTime.toLocaleString('en-US', {
+      options = {
         hour: 'numeric',
         minute: 'numeric',
         hour12: true,
-      });
+      };
+      match.time = startTime.toLocaleString('en-US', options);
       match.hero = <Hero>this.heroes[match.heroId.toString()];
     });
 
-    const tooltip = <HTMLElement>document.getElementById('custom-tooltip');
+    const tooltip = <HTMLElement>(
+      document.getElementById('custom-tooltip-container')
+    );
     return tooltip.innerHTML;
   }
 
