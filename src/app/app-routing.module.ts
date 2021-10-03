@@ -4,9 +4,9 @@ import { HomeComponent } from './home/home.component';
 import { PlayerComponent } from './player/player.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', component: HomeComponent },
   { path: 'player/:id', component: PlayerComponent },
-  { path: 'home', component: HomeComponent },
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
 @NgModule({
