@@ -82,6 +82,8 @@
             <th>TIME</th>
             <th>HERO</th>
             <th>RESULT</th>
+            <th>KDA</th>
+            <th>DURATION</th>
             <th>DOTABUFF</th>
           </tr>
         </thead>
@@ -99,6 +101,8 @@
               <span *ngIf="match.isWin" class="win">W</span
               ><span *ngIf="!match.isWin" class="loss">L</span>
             </td>
+            <td>{{ match.kda }}</td>
+            <td>{{ match.durationInTime }}</td>
             <td>
               <a
                 class="social-links"
