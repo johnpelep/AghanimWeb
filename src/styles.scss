@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 body {
+  background-color: black;
   background-image: url(./assets/lore_bg.jpg);
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   margin: 0;
 }

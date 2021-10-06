@@ -17,8 +17,18 @@ export interface Match {
   heroId: number;
   dotabuffUrl: string;
   startTime: string;
+  playerId: number;
+  duration: number;
+  kills: number;
+  deaths: number;
+  assists: number;
+
+  // custom fields
   time: string;
   hero: Hero;
+  personaName: string;
+  durationInTime: string;
+  kda: string;
 }
 
 export interface Record {
