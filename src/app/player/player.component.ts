@@ -261,6 +261,8 @@ export class PlayerComponent implements OnInit {
       };
       match.time = startTime.toLocaleString('en-US', options);
       match.hero = <Hero>this.heroes[match.heroId.toString()];
+      match.durationInTime = this.secondsToHms(match.duration);
+      match.kda = `${match.kills}/${match.deaths}/${match.assists}`;
     });
 
     const tooltip = <HTMLElement>(
@@ -284,5 +286,18 @@ export class PlayerComponent implements OnInit {
   closeModal() {
     const modal = <HTMLElement>document.getElementById('matches-modal');
     modal.style.display = 'none';
+  }
+
+  //src: https://stackoverflow.com/a/5539081
+  secondsToHms(d: number): string {
+    d = Number(d);
+
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    return (
+      (h > 0 ? h + ':' : '') + ('0' + m).slice(-2) + ':' + ('0' + s).slice(-2)
+    );
   }
 }
