@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import ApexCharts from 'apexcharts';
-import { Player, Match, Record } from '../player';
 import { PlayerService } from '../player.service';
 import { HeroService } from '../hero.service';
+import { Player, Record } from '../player';
+import { Match } from '../match';
 import { Hero } from '../hero';
 import { environment } from 'src/environments/environment';
 
@@ -225,8 +226,6 @@ export class PlayerComponent implements OnInit {
       dates.push(date);
       date = new Date(date.setDate(date.getDate() + 1)); // increment day by 1
     } while (date.getDate() != dateInPh.getDate());
-
-    console.log(dates);
 
     return dates;
   }

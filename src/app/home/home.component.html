@@ -1,55 +1,59 @@
 <div class="matches-container">
   <h2>RECENT MATCHES</h2>
-  <table class="matches-table">
-    <thead>
-      <tr>
-        <th>DATE/TIME</th>
-        <th>PLAYER</th>
-        <th>HERO</th>
-        <th>RESULT</th>
-        <th>DURATION</th>
-        <th>KDA</th>
-        <th>DOTABUFF</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let match of matches; even as isEven"
-        [ngClass]="{ even: isEven, odd: !isEven }"
-      >
-        <td>{{ match.time }}</td>
-        <td>
-          <a class="player" routerLink="/player/{{ match.playerId }}">{{
-            match.personaName
-          }}</a>
-        </td>
-        <td>
-          <img
-            class="hero"
-            src="{{ openDotaUrl + match.hero.icon }}"
-            alt="{{ match.hero.localized_name }}"
-          />
-        </td>
-        <td>
-          <span *ngIf="match.isWin" class="win">W</span
-          ><span *ngIf="!match.isWin" class="loss">L</span>
-        </td>
-        <td>
-          <span>{{ match.durationInTime }}</span>
-        </td>
-        <td>
-          <span>{{ match.kda }}</span>
-        </td>
-        <td>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-links"
-            href="{{ match.dotabuffUrl }}"
-            ><img src="./assets/dotabuff.png" alt="dotabuff"
-          /></a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div
+    class="matches-per-date"
+    *ngFor="let sortedMatch of sortedMatches; even as isEven"
+  >
+    <h3>{{ sortedMatch.date }}</h3>
+    <table class="matches-table" [ngClass]="{ even: isEven, odd: !isEven }">
+      <thead>
+        <tr>
+          <th>TIME</th>
+          <th>PLAYER</th>
+          <th>HERO</th>
+          <th>RESULT</th>
+          <th>DURATION</th>
+          <th>KDA</th>
+          <th>DOTABUFF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let match of sortedMatch.matches">
+          <td>{{ match.time }}</td>
+          <td>
+            <a class="player" routerLink="/player/{{ match.playerId }}">{{
+              match.personaName
+            }}</a>
+          </td>
+          <td>
+            <img
+              class="hero"
+              src="{{ openDotaUrl + match.hero.icon }}"
+              alt="{{ match.hero.localized_name }}"
+            />
+          </td>
+          <td>
+            <span *ngIf="match.isWin" class="win">W</span
+            ><span *ngIf="!match.isWin" class="loss">L</span>
+          </td>
+          <td>
+            <span>{{ match.durationInTime }}</span>
+          </td>
+          <td>
+            <span>{{ match.kda }}</span>
+          </td>
+          <td>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-links"
+              href="{{ match.dotabuffUrl }}"
+              ><img src="./assets/dotabuff.png" alt="dotabuff"
+            /></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+  </div>
 </div>

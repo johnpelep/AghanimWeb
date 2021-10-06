@@ -3,32 +3,38 @@
   margin: auto;
   width: 60%;
 
-  h2,
-  th {
+  h2 {
     font-weight: 900;
   }
 
-  table {
-    border-collapse: collapse;
+  .matches-per-date {
+    padding: 10px;
     text-align: center;
-    width: 100%;
 
-    thead {
-      background-color: rgb(31, 33, 38);
+    h3 {
+      font-weight: 900;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+
+      &.odd {
+        background-color: transparent;
+      }
+      &.even {
+        background-color: transparent;
+        // background-color: rgb(31, 33, 38);
+      }
 
       th {
         color: rgb(119, 143, 142);
+        font-weight: 900;
         padding: 10px;
       }
-    }
 
-    tbody {
-      font-weight: 500;
-
-      tr {
-        &.odd {
-          background-color: rgb(31, 33, 38);
-        }
+      tbody {
+        font-weight: 500;
 
         td {
           padding: 10px;
