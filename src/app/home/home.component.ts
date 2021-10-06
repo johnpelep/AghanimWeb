@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerService } from '../player.service';
 import { HeroService } from '../hero.service';
-import { Match } from '../player';
+import { Match, SortedMatch } from '../match';
 import { Hero } from '../hero';
 import { environment } from 'src/environments/environment';
 
@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 export class HomeComponent implements OnInit {
   heroes!: any;
   matches: Match[] = [];
+  sortedMatches: SortedMatch[] = [];
   openDotaUrl = environment.open_dota_url;
 
   constructor(
@@ -36,9 +37,15 @@ export class HomeComponent implements OnInit {
       players.forEach((player) => {
         player.matches.forEach((match) => {
           match.personaName = player.personaName;
-          match.time = new Date(match.startTime)
-            .toLocaleString('en-US')
-            .replace(',', '');
+          const options: Intl.DateTimeFormatOptions = {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+          };
+          match.time = new Date(match.startTime).toLocaleString(
+            'en-US',
+            options
+          );
           match.hero = <Hero>this.heroes[match.heroId.toString()];
           match.durationInTime = this.secondsToHms(match.duration);
           match.kda = `${match.kills}/${match.deaths}/${match.assists}`;
@@ -47,7 +54,38 @@ export class HomeComponent implements OnInit {
       });
 
       this.matches.sort((a, b) => b.matchId - a.matchId);
+
+      this.getSortedMatches();
     });
+  }
+
+  getSortedMatches() {
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    };
+
+    while (this.matches.length) {
+      const firstMatch = this.matches[0];
+      const firstMatchDate = new Date(firstMatch.startTime).toLocaleString(
+        'en-US',
+        options
+      );
+      const matches = this.matches.filter(
+        (m) =>
+          new Date(m.startTime).toLocaleString('en-US', options) ==
+          firstMatchDate
+      );
+      const sortedMatch: SortedMatch = {
+        date: firstMatchDate,
+        matches: matches,
+      };
+      this.sortedMatches.push(sortedMatch);
+      this.matches.splice(0, matches.length);
+    }
+
+    console.log(this.sortedMatches);
   }
 
   //src: https://stackoverflow.com/a/5539081

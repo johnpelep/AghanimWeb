@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-  background-color: black;
-  background-image: url(./assets/lore_bg.jpg);
+  background-image: url(./assets/lore_bg.jpg),
+    linear-gradient(
+      black,
+      rgb(4, 19, 45) 50%,
+      black 70%,
+      rgb(4, 19, 45) 90%,
+      black
+    );
   background-size: 100%;
   background-repeat: no-repeat;
   margin: 0;
