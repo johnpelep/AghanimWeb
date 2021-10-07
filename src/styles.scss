@@ -3,12 +3,13 @@ body {
   background-image: url(./assets/lore_bg.jpg),
     linear-gradient(
       black,
-      rgb(4, 19, 45) 50%,
-      black 70%,
+      rgb(4, 19, 45) 30%,
+      rgb(4, 12, 27) 60%,
       rgb(4, 19, 45) 90%,
-      black
+      rgb(4, 12, 27)
     );
   background-size: 100%;
   background-repeat: no-repeat;
   margin: 0;
+  width: 100%;
 }
