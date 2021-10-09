@@ -1,6 +1,7 @@
 import { Match } from './match';
 
 export interface Player {
+  id: number;
   personaName: string;
   avatar: string;
   profileUrl: string;

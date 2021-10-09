@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./player.component.scss'],
 })
 export class PlayerComponent implements OnInit {
+  playerId = 0;
   heroes!: any;
   player!: Player;
   statusClass = 'offline';
@@ -48,7 +49,10 @@ export class PlayerComponent implements OnInit {
 
   ngOnInit() {
     this.getHeroes();
-    this.getPlayer();
+    this.route.params.subscribe((res) => {
+      this.playerId = Number(res.id);
+      this.getPlayer();
+    });
   }
 
   getHeroes() {
@@ -56,8 +60,7 @@ export class PlayerComponent implements OnInit {
   }
 
   getPlayer() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.playerService.getPlayer(id).subscribe((player) => {
+    this.playerService.getPlayer(this.playerId).subscribe((player) => {
       this.player = player;
 
       if (!player) return;
