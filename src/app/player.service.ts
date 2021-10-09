@@ -23,4 +23,11 @@ export class PlayerService {
   getPlayer(id: number): Observable<Player> {
     return this.http.get<Player>(`${this.playersUrl}/${id}`);
   }
+
+  invitePlayer(steamdId64: string): Observable<Player> {
+    return this.http.post<Player>(
+      `${this.playersUrl}/Invite/${steamdId64}`,
+      {}
+    );
+  }
 }

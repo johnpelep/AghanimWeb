@@ -7,7 +7,15 @@
       src="./assets/aghanim_logo.png"
   /></a>
   <span>Welcome</span>
-  <div class="spacer"></div>
+  <div class="spacer">
+    <input
+      type="text"
+      id="profile-url"
+      placeholder="Paste Steam Profile URL here to add player"
+      (click)="onClick()"
+      (keyup)="onKey($event)"
+    />
+  </div>
   <a
     aria-label="AghanimWeb on Github"
     target="_blank"
