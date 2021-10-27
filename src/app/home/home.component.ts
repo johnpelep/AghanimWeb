@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerService } from '../player.service';
 import { HeroService } from '../hero.service';
+import { LoaderService } from '../loader.service';
 import { Match, SortedMatch } from '../match';
 import { Hero } from '../hero';
 import { environment } from 'src/environments/environment';
@@ -18,10 +19,12 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private playerService: PlayerService,
-    private heroService: HeroService
+    private heroService: HeroService,
+    private loaderService: LoaderService
   ) {}
 
   ngOnInit() {
+    this.loaderService.showLoader();
     this.getHeroes();
   }
 
@@ -33,30 +36,34 @@ export class HomeComponent implements OnInit {
   }
 
   getMatches() {
-    this.playerService.getPlayers().subscribe((players) => {
-      players.forEach((player) => {
-        player.matches.forEach((match) => {
-          match.personaName = player.personaName;
-          const options: Intl.DateTimeFormatOptions = {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-          };
-          match.time = new Date(match.startTime).toLocaleString(
-            'en-US',
-            options
-          );
-          match.hero = <Hero>this.heroes[match.heroId.toString()];
-          match.durationInTime = this.secondsToHms(match.duration);
-          match.kda = `${match.kills}/${match.deaths}/${match.assists}`;
-          this.matches.push(match);
+    this.playerService.getPlayers().subscribe(
+      (players) => {
+        players.forEach((player) => {
+          player.matches.forEach((match) => {
+            match.personaName = player.personaName;
+            const options: Intl.DateTimeFormatOptions = {
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            };
+            match.time = new Date(match.startTime).toLocaleString(
+              'en-US',
+              options
+            );
+            match.hero = <Hero>this.heroes[match.heroId.toString()];
+            match.durationInTime = this.secondsToHms(match.duration);
+            match.kda = `${match.kills}/${match.deaths}/${match.assists}`;
+            this.matches.push(match);
+          });
         });
-      });
 
-      this.matches.sort((a, b) => b.matchId - a.matchId);
+        this.matches.sort((a, b) => b.matchId - a.matchId);
 
-      this.getSortedMatches();
-    });
+        this.getSortedMatches();
+      },
+      () => {},
+      () => this.loaderService.hideLoader()
+    );
   }
 
   getSortedMatches() {

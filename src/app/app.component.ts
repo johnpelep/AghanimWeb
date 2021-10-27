@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { PlayerService } from './player.service';
+import { LoaderService } from './loader.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,11 @@ export class AppComponent {
   title = 'AghanimWeb';
   id = '';
 
-  constructor(private router: Router, private playerService: PlayerService) {}
+  constructor(
+    private router: Router,
+    private playerService: PlayerService,
+    private loaderService: LoaderService
+  ) {}
 
   invitePlayer(text: string) {
     if (!text.startsWith('https://steamcommunity.com/')) return;
@@ -20,13 +25,16 @@ export class AppComponent {
 
     this.id = <string>text.split('/').pop();
 
+    this.loaderService.showLoader();
+
     this.playerService.invitePlayer(this.id).subscribe(
       (player) => {
         const input = <HTMLInputElement>document.querySelector('#profile-url');
         input.value = '';
         this.router.navigate([`/player/${player.id}`]);
       },
-      (error) => {}
+      () => {},
+      () => this.loaderService.hideLoader()
     );
   }
 
