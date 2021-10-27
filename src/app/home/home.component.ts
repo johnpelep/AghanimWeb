@@ -84,8 +84,6 @@ export class HomeComponent implements OnInit {
       this.sortedMatches.push(sortedMatch);
       this.matches.splice(0, matches.length);
     }
-
-    console.log(this.sortedMatches);
   }
 
   //src: https://stackoverflow.com/a/5539081
