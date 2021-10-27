@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import ApexCharts from 'apexcharts';
 import { PlayerService } from '../player.service';
 import { HeroService } from '../hero.service';
+import { LoaderService } from '../loader.service';
 import { Player, Record } from '../player';
 import { Match } from '../match';
 import { Hero } from '../hero';
@@ -44,7 +45,8 @@ export class PlayerComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private playerService: PlayerService,
-    private heroService: HeroService
+    private heroService: HeroService,
+    private loaderService: LoaderService
   ) {}
 
   ngOnInit() {
@@ -60,18 +62,23 @@ export class PlayerComponent implements OnInit {
   }
 
   getPlayer() {
-    this.playerService.getPlayer(this.playerId).subscribe((player) => {
-      this.player = player;
+    this.loaderService.showLoader();
+    this.playerService.getPlayer(this.playerId).subscribe(
+      (player) => {
+        this.player = player;
 
-      if (!player) return;
-      this.setPersonaState();
+        if (!player) return;
+        this.setPersonaState();
 
-      if (!player.record.totalGames) return;
-      this.setRecord();
+        if (!player.record.totalGames) return;
+        this.setRecord();
 
-      if (!player.matches.length) return;
-      this.setUpChart();
-    });
+        if (!player.matches.length) return;
+        this.setUpChart();
+      },
+      () => {},
+      () => this.loaderService.hideLoader()
+    );
   }
 
   setPersonaState() {
@@ -175,7 +182,9 @@ export class PlayerComponent implements OnInit {
       },
     };
 
-    const chart = new ApexCharts(document.querySelector('#chart'), options);
+    const chartElem = <Element>document.querySelector('#chart');
+    chartElem.innerHTML = '';
+    const chart = new ApexCharts(chartElem, options);
 
     chart.render();
   }
