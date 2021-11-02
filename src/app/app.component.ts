@@ -19,8 +19,6 @@ export class AppComponent {
   ) {}
 
   invitePlayer(text: string) {
-    if (!text.startsWith('https://steamcommunity.com/')) return;
-
     if (text.endsWith('/')) text = text.slice(0, -1);
 
     this.id = <string>text.split('/').pop();
@@ -40,6 +38,7 @@ export class AppComponent {
 
   onClick() {
     navigator.clipboard.readText().then((text) => {
+      if (!text.startsWith('https://steamcommunity.com/')) return;
       const input = <HTMLInputElement>document.querySelector('#profile-url');
       input.value = text;
       this.invitePlayer(text);
@@ -49,6 +48,12 @@ export class AppComponent {
   onKey(event: KeyboardEvent) {
     if (event.code != 'Enter') return;
     const input = <HTMLInputElement>document.querySelector('#profile-url');
+    if (!input.value.startsWith('https://steamcommunity.com/')) {
+      alert(
+        'Invalid steam profile URL.\n\nSample URLs:\n- https://steamcommunity.com/id/johnpelep\n- https://steamcommunity.com/profiles/76561198069500729'
+      );
+      return;
+    }
     this.invitePlayer(input.value);
   }
 }
