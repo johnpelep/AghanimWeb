@@ -28,7 +28,6 @@ export class PlayerComponent implements OnInit {
   streak = '--';
 
   // for chart and modal
-  openDotaUrl = environment.open_dota_url;
   datesUntilLastMonth: Date[] = [];
   matchesPerCategory: Match[][] = [];
   selectedMatches: Match[] = [];
@@ -272,6 +271,10 @@ export class PlayerComponent implements OnInit {
       };
       match.time = startTime.toLocaleString('en-US', options);
       match.hero = <Hero>this.heroes[match.heroId.toString()];
+      match.hero.img = `${environment.hero_images}/${match.hero.name.replace(
+        'npc_dota_hero_',
+        ''
+      )}.png`;
       match.durationInTime = this.secondsToHms(match.duration);
       match.kda = `${match.kills}/${match.deaths}/${match.assists}`;
     });

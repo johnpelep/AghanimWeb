@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit {
   heroes!: any;
   matches: Match[] = [];
   sortedMatches: SortedMatch[] = [];
-  openDotaUrl = environment.open_dota_url;
 
   constructor(
     private playerService: PlayerService,
@@ -53,6 +52,9 @@ export class HomeComponent implements OnInit {
             match.hero = <Hero>this.heroes[match.heroId.toString()];
             match.durationInTime = this.secondsToHms(match.duration);
             match.kda = `${match.kills}/${match.deaths}/${match.assists}`;
+            match.hero.img = `${
+              environment.hero_images
+            }/${match.hero.name.replace('npc_dota_hero_', '')}.png`;
             this.matches.push(match);
           });
         });
