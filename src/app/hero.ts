@@ -3,4 +3,5 @@ export interface Hero {
   localized_name: string;
   img: string;
   icon: string;
+  name: string;
 }
